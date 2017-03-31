@@ -32,7 +32,6 @@ public class ChangedForeignKeyChangeGenerator extends liquibase.diff.output.chan
                 return null;
             }
         }
-
         return super.fixChanged(changedObject, differences, control, referenceDatabase, comparisonDatabase, chain);
     }
 }

@@ -8,6 +8,9 @@ import liquibase.ext.hibernate.database.HibernateDatabase;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Sequence;
 
+/**
+ * Don't generate sequences if database does not support it
+ */
 public class MissingSequenceChangeGenerator extends liquibase.diff.output.changelog.core.MissingSequenceChangeGenerator {
 
     @Override
@@ -21,8 +24,10 @@ public class MissingSequenceChangeGenerator extends liquibase.diff.output.change
     @Override
     public Change[] fixMissing(DatabaseObject missingObject, DiffOutputControl control, Database referenceDatabase, Database comparisonDatabase, ChangeGeneratorChain chain) {
         if (referenceDatabase instanceof HibernateDatabase && !comparisonDatabase.supportsSequences()) {
+            System.out.println("MissingSequenceChangeGenerator Skipping");
             return null;
         } else if (comparisonDatabase instanceof HibernateDatabase && !referenceDatabase.supportsSequences()) {
+            System.out.println("MissingSequenceChangeGenerator Skipping");
             return null;
         }else {
             return super.fixMissing(missingObject, control, referenceDatabase, comparisonDatabase, chain);

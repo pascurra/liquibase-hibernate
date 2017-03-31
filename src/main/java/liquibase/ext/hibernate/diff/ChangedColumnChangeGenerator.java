@@ -43,10 +43,13 @@ public class ChangedColumnChangeGenerator extends liquibase.diff.output.changelo
                 if (difference.getReferenceValue() == null && difference.getComparedValue() instanceof DatabaseFunction) {
                     //database sometimes adds a function default value, like for timestamp columns
                     return;
+                }else if(difference.getReferenceValue() instanceof DatabaseFunction && difference.getComparedValue() == null){
+                    //handle endless changesets of existing postgres sequences as default value
+                    return;
                 }
             }
             // do nothing, types tend to not match with hibernate
         }
-            super.handleDefaultValueDifferences(column, differences, control, changes, referenceDatabase, comparisonDatabase);
+        super.handleDefaultValueDifferences(column, differences, control, changes, referenceDatabase, comparisonDatabase);
     }
 }
